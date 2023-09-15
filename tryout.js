@@ -42,7 +42,7 @@ function playSound(){
 }
 
 var buttonSizes = [canvas.width/4, canvas.width/4, canvas.width/4, canvas.width/4];
-var buttonIncrease = 50;
+var buttonIncrease = 80;
 
 function rect(x, y, wid, hi){
   ctx.beginPath();
@@ -69,32 +69,30 @@ function line(x1, y1, x2, y2){
 
 function drawArrows(arrowsX, arrowsY, arrowSpacer){
 
-  for (var i = 0; i < 4; i++){
-    
-    ctx.beginPath();
-    
-    ctx.rect(i * (2*canvas.width/4-buttonSizes[i]) , 800, buttonSizes[i], 100);
-    ctx.fillStyle = colors[i];
-    ctx.fill();
-
-    if (buttonSizes[i] > canvas.width/4){buttonSizes[i] -= 10;}
-  }
-    
-  ctx.font = "100px Arial";
-  text("v", arrowsX, arrowsY + canvas.width / 16);
-  text("b",arrowsX+canvas.width/4, arrowsY + canvas.width/13);
-  text("n", arrowsX + 1.99*canvas.width/4, arrowsY + canvas.width / 16);
- 
-  text("m", arrowsX + 2.88*canvas.width/4, arrowsY + canvas.width / 16);
-    
-    line(0, 800, 450, 800);
-
-    for (var i = 1; i < 4; i++){
-
-        line(i * canvas.width/4, 800, i * canvas.width/4, 900)
+    for (var i = 0; i < 4; i++){
+      ctx.beginPath();
+      ctx.rect(i * canvas.width/4, 800, buttonSizes[i], 100);  // Adjusted this line
+      ctx.fillStyle = colors[i];
+      ctx.fill();
+      ctx.closePath();  // Close the path for safety
+      
+      if (buttonSizes[i] > canvas.width/4) {
+          buttonSizes[i] -= 10;
+      }
     }
-
-}
+      
+    ctx.font = "100px Arial";
+    text("v", arrowsX, arrowsY + canvas.width / 16);
+    text("b", arrowsX+canvas.width/4, arrowsY + canvas.width/13);
+    text("n", arrowsX + 1.99*canvas.width/4, arrowsY + canvas.width / 16);
+    text("m", arrowsX + 2.88*canvas.width/4, arrowsY + canvas.width / 16);
+      
+    line(0, 800, 450, 800);
+    for (var i = 1; i < 4; i++){
+      line(i * canvas.width/4, 800, i * canvas.width/4, 900);
+    }
+  
+  }
 
 
 var score = 0;
@@ -152,6 +150,7 @@ function fallingBlocks(){
     if (misses >= 20){
         gameOver.play();
         clearInterval(falling);
+
         document.getElementById("misses").innerHTML = "Misses: " + misses;
 
         ctx.clearRect(0, 0, 450, 900);
@@ -159,6 +158,7 @@ function fallingBlocks(){
         ctx.font = "30px Arial";
         ctx.fillStyle = "black";
         text('Press "r" to try again', 90, 300);
+    
         
     }
     else{
@@ -175,102 +175,64 @@ function fallingBlocks(){
 }
 
 
-function keyDown(){
+function keyDown() {
     var key = event.key.toLowerCase();
+    var blockDetected = false;
 
-    // console.log(misses >= 20  );
-    
-    if (key == "v"){
-        console.log("V key pressed");
-        if (blocks[0][0] == 0){
-            if (blocks[0][1] >= 800 - 100){
+    for (var i = 0; i < blocks.length; i++) {
+        if (key == "v" && blocks[i][0] == 0) {
+            if (blocks[i][1] >= 800 - 100) {
+                blockDetected = true;
                 score += 2;
-                blocks.splice(0, 1);
-                sounds[Math.round(Math.random()*7)].play();
+                blocks.splice(i, 1);
+                sounds[Math.round(Math.random() * 7)].play();
                 buttonSizes[0] += buttonIncrease;
+                break;
             }
-            else{
-                score --;
-                misses ++;
-            }
-        }
-        
-        else{
-            score --;
-            misses ++;
-        }
-        
-    }
-    
-    if (key == "b"){
-        console.log("B key pressed");
-        console.log(blocks[0][0]);
-        if (blocks[0][0] == 1){
-            if (blocks[0][1] >= 800 - 100){
+        } else if (key == "b" && blocks[i][0] == 1) {
+            if (blocks[i][1] >= 800 - 100) {
+                blockDetected = true;
                 score += 2;
-                blocks.splice(0, 1);
-                sounds[Math.round(Math.random()*7)].play();
+                blocks.splice(i, 1);
+                sounds[Math.round(Math.random() * 7)].play();
                 buttonSizes[1] += buttonIncrease;
+                break;
             }
-            else{
-                score --;
-                misses ++;
-            }
-        }
-        
-        else{
-            score --;
-            misses ++;
-        }
-    }
-    
-    if (key == "n"){
-        if (blocks[0][0] == 2){
-            if (blocks[0][1] >= 800 - 100){
+        } else if (key == "n" && blocks[i][0] == 2) {
+            if (blocks[i][1] >= 800 - 100) {
+                blockDetected = true;
                 score += 2;
-                blocks.splice(0, 1);
-                sounds[Math.round(Math.random()*7)].play();
+                blocks.splice(i, 1);
+                sounds[Math.round(Math.random() * 7)].play();
                 buttonSizes[2] += buttonIncrease;
+                break;
             }
-            else{
-                score --;
-                misses ++;
-            }
-        }
-        
-        else{
-            score --;
-            misses ++;
-        }
-    }
-    
-    if (key == "m"){
-        if (blocks[0][0] == 3){
-            if (blocks[0][1] >= 800 - 100){
+        } else if (key == "m" && blocks[i][0] == 3) {
+            if (blocks[i][1] >= 800 - 100) {
+                blockDetected = true;
                 score += 2;
-                blocks.splice(0, 1);
-                sounds[Math.round(Math.random()*7)].play();
+                blocks.splice(i, 1);
+                sounds[Math.round(Math.random() * 7)].play();
                 buttonSizes[3] += buttonIncrease;
+                break;
             }
-            else{
-                score --;
-                misses ++;
-            }
-        }
-        
-        else{
-            score --;
-            misses ++;
         }
     }
-    
 
-    if (misses >= 20 && key == "r"){
-      score = 0;
-      speed = 2;
-      misses = 0;
-      blocks = [];
-      falling = setInterval(fallingBlocks, 50/3);
+    // If no block was detected for the correct position, decrease the score and increase misses
+    if (!blockDetected) {
+        if (key == "v" || key == "b" || key == "n" || key == "m") {
+            score--;
+            misses++;
+        }
     }
-       
+
+    // Handling game restart when the "r" key is pressed
+    if (misses >= 20 && key == "r") {
+        score = 0;
+        speed = 2;
+        misses = 0;
+        blocks = [];
+        falling = setInterval(fallingBlocks, 50 / 3);
+    }
 }
