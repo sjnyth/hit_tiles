@@ -1,4 +1,4 @@
-# 🎵 Hit Tunes: A Rhythm Game 🎵
+# 🎵 Hit Tiles: A Rhythm Game 🎵
 "Hit Tunes" is a simple rhythm game built using vanilla JavaScript and the HTML5 canvas. Blocks fall from the top, and the player needs to press specific keys in time with the blocks reaching the bottom to score points.
 
 ## Gameplay Preview 🎮
